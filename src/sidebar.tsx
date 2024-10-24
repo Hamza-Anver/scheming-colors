@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+import { toCSS, toJSON } from 'cssjson';
 
 interface CSSRuleObject {
     [selector: string]: {
@@ -55,12 +56,13 @@ const CollapsibleToolbar: React.FC<ToolbarProps> = ({ cssStylesheet, updateCss }
             }
 
             const cssText = await response.text();
-            const cssJson = convertCSSToJSON(cssText);
+            updateCss(cssText);
+            const cssJson = toJSON(cssText);
+            console.log(cssJson);
 
             if (Object.keys(cssJson).length > 0) {
-
                 setState({ ...state, errorMessage: '', cssJson });
-                updateCss(convertJSONToCSS(cssJson));
+                //updateCss(toCSS(cssJson));
             } else {
                 setState({ ...state, errorMessage: 'No valid CSS rules found in the CSS file.', cssJson: {} });
             }
@@ -125,12 +127,12 @@ const CollapsibleToolbar: React.FC<ToolbarProps> = ({ cssStylesheet, updateCss }
         const updatedCSSJson = { ...state.cssJson };
         updatedCSSJson[selector][property] = newColor;
         setState({ ...state, cssJson: updatedCSSJson });
-        updateCss(convertJSONToCSS(updatedCSSJson));
+        updateCss(toCSS(updatedCSSJson));
     };
 
     // Function to copy the CSS to clipboard
     const copyCSSToClipboard = () => {
-        const cssString = convertJSONToCSS(state.cssJson);
+        const cssString = toCSS(state.cssJson);
         navigator.clipboard.writeText(cssString);
         alert('CSS copied to clipboard!');
     };
@@ -216,7 +218,7 @@ const CollapsibleToolbar: React.FC<ToolbarProps> = ({ cssStylesheet, updateCss }
                         </Modal.Header>
                         <Modal.Body style={{ maxHeight: '60vh', overflowY: 'auto' }}>
                             <SyntaxHighlighter language="css" style={tomorrow}>
-                                {convertJSONToCSS(state.cssJson)}
+                                {toCSS(state.cssJson)}
                             </SyntaxHighlighter>
                         </Modal.Body>
                         <Modal.Footer>

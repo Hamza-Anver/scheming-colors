@@ -25,6 +25,7 @@ var htmlStringPre = `
 	<!-- Latest commit from GitHub -->
 	<!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css"> -->
 	<!-- Local version -->
+  <style> all: unset; </style>
 `
 var htmlStringPost = `
 </head>

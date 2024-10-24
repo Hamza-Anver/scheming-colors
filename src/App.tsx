@@ -14,8 +14,8 @@ function App() {
 
   return (
     <Container fluid>
-      <CollapsibleToolbar cssStylesheet={cssStylesheet} updateCss={updateCssStylesheet} />
       <DemoPage cssStylesheet={cssStylesheet} updateCss={updateCssStylesheet}/>
+      <CollapsibleToolbar cssStylesheet={cssStylesheet} updateCss={updateCssStylesheet} />
     </Container>
   );
 }
