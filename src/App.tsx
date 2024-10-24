@@ -1,25 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import DemoPage from './demopage';
+import { Container } from 'react-bootstrap';
+import CollapsibleToolbar from './sidebar';
 
 function App() {
+  const [cssStylesheet, setCssStylesheet] = useState<string>('');
+
+  // Function to update the CSS (this function will be passed to the child component)
+  const updateCssStylesheet = (newCss: string) => {
+    setCssStylesheet(newCss);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container fluid>
+      <CollapsibleToolbar cssStylesheet={cssStylesheet} updateCss={updateCssStylesheet} />
+      <DemoPage cssStylesheet={cssStylesheet} updateCss={updateCssStylesheet}/>
+    </Container>
   );
 }
 
