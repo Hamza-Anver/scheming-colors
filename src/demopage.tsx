@@ -9,19 +9,15 @@ interface DemoPageProps {
     updateCss: (newCss: string) => void; // Function passed from the parent to update CSS
 }
 
-const DemoPage: React.FC<DemoPageProps> = ({ cssStylesheet, updateCss }) => {
-    const iframeRef = useRef<HTMLIFrameElement>(null);
-
-    var htmlString = `
+var htmlStringPre = `
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML5 Test Page</title>
-    <style>
-        ${cssStylesheet}
-    </style>
+`
+var htmlStringPost = `
   </head>
   <body>
     <div id="top" role="document">
@@ -573,21 +569,25 @@ const DemoPage: React.FC<DemoPageProps> = ({ cssStylesheet, updateCss }) => {
 </html>
 `
 
+const DemoPage: React.FC<DemoPageProps> = ({ cssStylesheet, updateCss }) => {
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+
     // Update the iframe content whenever the CSS changes
     useEffect(() => {
         if (iframeRef.current) {
             // Replace the placeholder {cssStylesheet} in the template with the actual CSS content
-            const updatedHtmlString = htmlString.replace('{cssstylesheet}', cssStylesheet);
 
             // Access the iframe's document and write the updated HTML string
             const iframeDoc = iframeRef.current.contentDocument;
             if (iframeDoc) {
                 iframeDoc.open();
-                iframeDoc.write(updatedHtmlString);
+                iframeDoc.write(htmlStringPre);
+                iframeDoc.write(`<style>${cssStylesheet}</style>`);
+                iframeDoc.write(htmlStringPost);
                 iframeDoc.close();
             }
         }
-    }, [cssStylesheet, htmlString]); // Re-run effect when cssStylesheet is updated
+    }, [cssStylesheet]); // Re-run effect when cssStylesheet is updated
 
     return (
         <Container fluid>

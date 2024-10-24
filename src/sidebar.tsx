@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+
 interface CSSRuleObject {
     [selector: string]: {
         [property: string]: string;
@@ -21,7 +22,7 @@ interface ToolbarProps {
     updateCss: (newCss: string) => void; // Function passed from the parent to update CSS
 }
 
-const CollapsibleToolbar: React.FC<ToolbarProps> = ({cssStylesheet, updateCss}) => {
+const CollapsibleToolbar: React.FC<ToolbarProps> = ({ cssStylesheet, updateCss }) => {
     const [show, setShow] = useState<boolean>(false);
     const [modalShow, setModalShow] = useState<boolean>(false); // Modal state
     const [state, setState] = useState<ColorExtractorState>({
@@ -57,7 +58,7 @@ const CollapsibleToolbar: React.FC<ToolbarProps> = ({cssStylesheet, updateCss}) 
             const cssJson = convertCSSToJSON(cssText);
 
             if (Object.keys(cssJson).length > 0) {
-                
+
                 setState({ ...state, errorMessage: '', cssJson });
                 updateCss(convertJSONToCSS(cssJson));
             } else {
@@ -96,13 +97,11 @@ const CollapsibleToolbar: React.FC<ToolbarProps> = ({cssStylesheet, updateCss}) 
             while ((propertyMatch = propertyRegex.exec(properties)) !== null) {
                 const property = propertyMatch[1].trim();
                 const value = propertyMatch[2].trim();
-                // Only add properties that are hex, rgb(), rgba(), or named colors (ignore var(--something))
-                if (!value.includes('var(') && isColorValue(value)) {
-                    cssJson[selector][property] = value;
-                }
+                cssJson[selector][property] = value;
+
             }
         }
-
+        console.log(cssJson);
         return cssJson;
     };
 
